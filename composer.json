@@ -1,0 +1,23 @@
+{
+    "name": "dmstr/yii2-active-record-search",
+    "description": "Highly customizable ActiveRecord search indexer",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Jens Giessmann",
+            "email": "j.giessmann@herzogkommunikation.de"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0",
+        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "2amigos/yii2-translateable-behavior": "^1.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "dmstr\\activeRecordSearch\\": "src/"
+        }
+    }
+}
