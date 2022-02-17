@@ -70,7 +70,9 @@ class FrontendSearch extends Search
             $like_op = 'or like';
         }
         $query->andFilterWhere([$like_op, 'search_text', array_filter(explode(' ', $this->query))]);
-        $query->groupBy(['group', 'model_id']);
+        // removed due to ONLY_FULL_GROUP_BY issue
+        // see: https://www.percona.com/blog/2019/05/13/solve-query-failures-regarding-only_full_group_by-sql-mode/
+        // $query->groupBy(['group', 'model_id']);
         return $query;
 
     }
