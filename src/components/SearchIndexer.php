@@ -306,6 +306,11 @@ class SearchIndexer extends Component
         return true;
     }
 
+    /**
+     * process languages param
+     *
+     * @return array|false|mixed
+     */
     protected function initLanguages()
     {
         if (is_callable($this->languages)) {
@@ -319,6 +324,11 @@ class SearchIndexer extends Component
         return [];
     }
 
+    /**
+     * init fallbackLanguage param which is used as init translation lang when creating new groups
+     *
+     * @return false|mixed|string
+     */
     protected function initFallbackLanguage()
     {
         if (is_callable($this->fallbackLanguage)) {
@@ -332,6 +342,16 @@ class SearchIndexer extends Component
         return $this->languages[0];
     }
 
+    /**
+     * get Query for item
+     * if not defined we will use the default AR::find() Method
+     * if defined as callback return result
+     * if defined as string exec model_class::find_method()
+     *
+     * @param $item
+     *
+     * @return mixed
+     */
     protected function getItemsQuery($item)
     {
         // as default we use the default find() Method from AR-ModelClass
@@ -347,6 +367,14 @@ class SearchIndexer extends Component
 
     }
 
+    /**
+     * get route for item, can be defined as callback or string
+     *
+     * @param $item
+     * @param $param
+     *
+     * @return string
+     */
     protected function processRoute($item, $param)
     {
         if (is_callable($param)) {
@@ -356,6 +384,15 @@ class SearchIndexer extends Component
         return $param;
     }
 
+    /**
+     * get url_params for each item
+     * each param can be defined as string (attribute name) or callback
+     *
+     * @param $item
+     * @param $params
+     *
+     * @return array
+     */
     protected function processUrlParams($item, $params)
     {
         $url_params = [];
@@ -364,11 +401,22 @@ class SearchIndexer extends Component
             if (!empty($value)) {
                 $url_params[$p_key] = $value;
             }
-            $url_params[$p_key] = $this->processProperty($item, $p_value);
         }
         return $url_params;
     }
 
+    /**
+     * process given property for given item
+     *
+     * if property is a callback, it will be called with item as param
+     * if property is a string, and item is an object we return $item->$prop
+     * if property is a string, and item is an array we return $item[$prop]
+     *
+     * @param $item
+     * @param $prop
+     *
+     * @return string
+     */
     protected function processProperty($item, $prop)
     {
         if (is_callable($prop)) {
@@ -389,6 +437,11 @@ class SearchIndexer extends Component
         return '';
     }
 
+    /**
+     * if required create new SearchGroup while indexing
+     *
+     * @return void
+     */
     protected function updateSearchItemGroupsFromConfig() {
         foreach ($this->searchItems as $item) {
 
@@ -411,6 +464,15 @@ class SearchIndexer extends Component
         }
     }
 
+    /**
+     * info, debug output methods while indexing
+     */
+
+    /**
+     * @param Search $searchItem
+     *
+     * @return void
+     */
     protected function outItemInfo(Search $searchItem)
     {
         $values = [$this->currentLang, $searchItem->model_class, $searchItem->model_id];
