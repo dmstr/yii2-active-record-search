@@ -11,6 +11,11 @@ class FrontendSearch extends Search
 {
 
     /**
+     * scenario which is (should be) used in frontend
+     */
+    public const FRONTEND_SCENARIO = 'frontend';
+
+    /**
      * search string from form input
      * @var
      */
@@ -30,9 +35,35 @@ class FrontendSearch extends Search
     public function rules()
     {
         $rules = parent::rules();
-        $rules['frontend_query'] = ['query', 'string', 'min' => 3  ];
+        $rules['frontend_query_filter'] = ['query', 'filter',
+            'filter' => function ($value) {
+                return strip_tags($value);
+            },
+        'on' => static::FRONTEND_SCENARIO];
+        $rules['frontend_query'] = ['query', 'string', 'min' => 3, 'on' => static::FRONTEND_SCENARIO ];
 
         return $rules;
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->scenario = static::FRONTEND_SCENARIO;
+    }
+
+    /**
+     * define frontend context scenario
+     *
+     * @return array|array[]
+     */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['frontend'] = [
+            'query'
+        ];
+        return $scenarios;
+
     }
 
     /**

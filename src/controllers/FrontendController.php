@@ -65,25 +65,28 @@ class FrontendController extends Controller
         }
 
         $searchModel = new FrontendSearch();
+        $searchModel->scenario = $searchModel::FRONTEND_SCENARIO;
         $result = null;
         $resultGroups = null;
         $searchInputWidget = null;
 
         if (Yii::$app->request->get('query')) {
             $searchModel->load(Yii::$app->request->get());
-            $resultGroups = $searchModel->getActiveResultGroups();
-            $resultItems = $searchModel->search()->andWhere(['group' => array_keys($resultGroups)])->all();
-            // build result array grouped by resultGroup ref_names to preserve group ordering from DB
-            $result = [];
-            foreach ($resultGroups as $ref => $group) {
-                $result[$ref] = [];
-            }
-            foreach ($resultItems as $item) {
-                // should not occur, but to be safe....
-                if (!array_key_exists($item['group'], $result)) {
-                    continue;
+            if ($searchModel->validate()) {
+                $resultGroups = $searchModel->getActiveResultGroups();
+                $resultItems = $searchModel->search()->andWhere(['group' => array_keys($resultGroups)])->all();
+                // build result array grouped by resultGroup ref_names to preserve group ordering from DB
+                $result = [];
+                foreach ($resultGroups as $ref => $group) {
+                    $result[$ref] = [];
                 }
-                $result[$item['group']][] = $item;
+                foreach ($resultItems as $item) {
+                    // should not occur, but to be safe....
+                    if (!array_key_exists($item['group'], $result)) {
+                        continue;
+                    }
+                    $result[$item['group']][] = $item;
+                }
             }
         }
         if (!empty($this->module->searchInputWidget)) {
