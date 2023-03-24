@@ -209,6 +209,10 @@ class SearchIndexer extends Component
                 $models = $this->getItemsQuery($item)->all();
                 #$this->memDebug();
                 $detailInfo[$this->currentLang][$item['group']] = 0;
+                if (empty($models)) {
+                    $this->debug('no models found');
+                    continue;
+                }
                 // todo skip if empty
                 foreach ($models as $model) {
                     $text = '';
@@ -221,6 +225,7 @@ class SearchIndexer extends Component
                                 $sub_models = is_array($model->$a_key) ? $model->$a_key : [$model->$a_key];
                             } else {
                                 $this->debug('no submodels found');
+                                continue;
                             }
                             // get values from submodel
                             foreach ($a_value as $prop) {
@@ -425,7 +430,7 @@ class SearchIndexer extends Component
         }
 
         if (is_object($item) && isset($item->$prop)) {
-            $this->debug('process submodel prop : ' . $prop . ' -> ' . $item->$prop);
+            $this->debug('process property : ' . $prop . ' -> ' . $item->$prop);
             return trim($item->$prop);
         }
 
