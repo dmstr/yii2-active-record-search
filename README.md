@@ -13,6 +13,29 @@ The base idea is:
 see [Module](src/Module.php) for available module params.
 These should allow to customize almost all aspects of the module and its behavior.
 
+simple example config:
+```php
+    'modules' => [
+        'search' => [
+            'class' => \dmstr\activeRecordSearch\Module::class,
+            'layout' => '@backend/views/layouts/box',
+            'frontendLayout' => '@app/views/layouts/container',
+        ],
+    ]
+```
+
+The module provides 2 types of controllers:
+- frontend:
+  - `\dmstr\activeRecordSearch\controllers\FrontendController`
+- backend:
+  - `\dmstr\activeRecordSearch\controllers\SearchGroupController` to manage (translate, en/disable) search groups which are created by the indexer
+  - `\dmstr\activeRecordSearch\controllers\SearchController` to manage search items, attentions these will be overwritten by next indexer run. Should usually not be required
+  - `\dmstr\activeRecordSearch\controllers\SearchGroupTranslationController` search group translations. Should usually not be required
+
+Additionally the module provide a simple Search-Input widget:
+- `\dmstr\activeRecordSearch\widgets\SearchInput`
+which will be used in frontend controller if not overwritten via modul `searchInputWidget` property
+
 ## Indexer
 
 The heart of this module is the [SearchIndexer](src/components/SearchIndexer.php).
@@ -50,13 +73,13 @@ date >> $LOG
 - We also define which url_params should be used to build the result URL
 - `link_text` defines the text for the result Link
 
-```
+```php
  $config['components']['searchIndexer'] = [
      'class' => \dmstr\activeRecordSearch\components\SearchIndexer::class,
      'languages' => function() {
          return project\components\CountryHelper::activeLanguages();
      },
-     'fallbackLanguage => 'en',
+     'fallbackLanguage' => 'en',
      'searchItems' => [
          'products'  => [
              'model_class'      => Product::class,
@@ -94,7 +117,7 @@ date >> $LOG
 - if you have SEO url rules, you can define all required `url_params`
 - ...
 
-```
+```php
  $config['components']['searchIndexer'] = [
      'class' => \dmstr\activeRecordSearch\components\SearchIndexer::class,
      'languages' => function() {
