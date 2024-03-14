@@ -25,8 +25,8 @@ class Search extends SearchModel
 	 */
 	public function rules() {
 		return [
-			[['id', 'model_id'], 'integer'],
-			[['model_class', 'route', 'language', 'search_text'], 'safe'],
+			[['id'], 'integer'],
+			[['model_class', 'route', 'model_id', 'language', 'search_text', 'group'], 'safe'],
 		];
 	}
 
@@ -67,6 +67,7 @@ class Search extends SearchModel
 		$query->andFilterWhere([
 				'id' => $this->id,
 				'model_id' => $this->model_id,
+				'group' => $this->group,
 			]);
 
 		$query->andFilterWhere(['like', 'model_class', $this->model_class])
