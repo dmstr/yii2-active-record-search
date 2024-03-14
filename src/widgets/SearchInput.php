@@ -65,7 +65,7 @@ class SearchInput extends \yii\base\Widget
             'formAction' => $this->formAction,
             'wrapperClass' => $this->wrapperClass,
             'enableAutoSubmit' => $this->enableAutoSubmit,
-            'showLabel' => $this->showInputLabel,
+            'showInputLabel' => $this->showInputLabel,
             'placeholderText' => $this->placeholderText,
             'submitButtonText' => $this->submitButtonText,
         ]);
