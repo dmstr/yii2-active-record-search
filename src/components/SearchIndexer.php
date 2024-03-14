@@ -247,7 +247,7 @@ class SearchIndexer extends Component
                     $searchItem->model_class = $item['model_class'];
                     $searchItem->route = $this->processRoute($model, $item['route']);
                     $searchItem->language = $this->currentLang;
-                    $searchItem->model_id = $model->id;
+                    $searchItem->model_id = (string)$model->id;
                     $searchItem->search_text = $text;
                     $searchItem->url_params = Json::encode($this->processUrlParams($model, $item['url_params']));
                     $searchItem->link_text = $this->processProperty($model, $item['link_text']);
