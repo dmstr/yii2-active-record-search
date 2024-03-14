@@ -12,7 +12,7 @@ use Yii;
  * @property string $group
  * @property string $model_class
  * @property string $route
- * @property integer $model_id
+ * @property string $model_id
  * @property string $language
  * @property string $url_params
  * @property string $link_text
@@ -42,9 +42,8 @@ abstract class Search extends \yii\db\ActiveRecord
     {
          $rules = parent::rules();
          $rules[] = [['group', 'model_id', 'search_text'], 'required'];
-         $rules[] = [['model_id'], 'integer'];
          $rules[] = [['search_text'], 'string'];
-         $rules[] = [['group', 'model_class', 'route', 'url_params', 'link_text'], 'string', 'max' => 255];
+         $rules[] = [['group', 'model_class', 'route', 'model_id', 'url_params', 'link_text'], 'string', 'max' => 255];
          $rules[] = [['language'], 'string', 'max' => 7];
          $rules[] = [['group'], 'exist', 'skipOnError' => true, 'targetClass' => \dmstr\activeRecordSearch\models\SearchGroup::className(), 'targetAttribute' => ['group' => 'ref_name']];
 
