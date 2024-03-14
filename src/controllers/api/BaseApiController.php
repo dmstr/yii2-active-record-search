@@ -21,7 +21,7 @@ class BaseApiController extends Controller
     {
 
         if ((empty($this->module->apiPermission)) && (! Yii::$app->user->can($this->module->apiPermission))) {
-            throw new MethodNotAllowedHttpException(Yii::t('yii', 'Permission denied.'));
+            throw new MethodNotAllowedHttpException(Yii::t('search', 'Permission denied.'));
         }
 
         return parent::beforeAction($action);
