@@ -52,7 +52,7 @@ use yii\helpers\Html;
 			<?php echo $form->field($model, 'name'); ?>
 
 <!-- attribute status -->
-            <?php echo $form->field($model, 'status')->dropDownList([0 => YII::t('crud', 'inactive'), 1 => YII::t('crud', 'active')]); ?>
+            <?php echo $form->field($model, 'status')->dropDownList([0 => YII::t('search', 'inactive'), 1 => YII::t('search', 'active')]); ?>
 
 <!-- attribute language -->
 			<?php echo $form->field($model, 'language'); ?>

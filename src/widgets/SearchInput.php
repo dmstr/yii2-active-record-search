@@ -21,6 +21,10 @@ class SearchInput extends \yii\base\Widget
     public $permission  = 'search_frontend';
     public $formId = false;
     public $wrapperClass = '';
+    public $enableAutoSubmit = true;
+    public $showInputLabel = true;
+    public $placeholderText;
+    public $submitButtonText;
 
     public function init()
     {
@@ -32,6 +36,15 @@ class SearchInput extends \yii\base\Widget
         if ($this->formId === false) {
             $this->formId = 'frontend-search-form-' . $this->id;
         }
+
+        if (empty($this->placeholderText)) {
+            $this->placeholderText = Yii::t('search', 'Search');
+        }
+
+        if (empty($this->submitButtonText)) {
+            $this->submitButtonText = Yii::t('search', 'Search');
+        }
+
         parent::init();
 
     }
@@ -50,7 +63,11 @@ class SearchInput extends \yii\base\Widget
             'model' => $this->model,
             'formId' => $this->formId,
             'formAction' => $this->formAction,
-            'wrapperClass' => $this->wrapperClass
+            'wrapperClass' => $this->wrapperClass,
+            'enableAutoSubmit' => $this->enableAutoSubmit,
+            'showInputLabel' => $this->showInputLabel,
+            'placeholderText' => $this->placeholderText,
+            'submitButtonText' => $this->submitButtonText,
         ]);
     }
 }

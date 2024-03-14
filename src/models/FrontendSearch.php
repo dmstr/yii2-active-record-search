@@ -3,6 +3,7 @@
 namespace dmstr\activeRecordSearch\models;
 
 use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
  * This is the model class for table "dmstr_search".
@@ -139,5 +140,12 @@ class FrontendSearch extends Search
     {
         $urlParts = array_merge([$item['route']], \yii\helpers\Json::decode($item['url_params']));
         return \yii\helpers\Url::to($urlParts);
+    }
+
+    public function attributeLabels()
+    {
+        $attributeLabels = parent::attributeLabels();
+        $attributeLabels['query'] = Yii::t('search', 'Query');
+        return $attributeLabels;
     }
 }

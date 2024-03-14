@@ -5,6 +5,10 @@
  * @var string $formAction
  * @var string $formId
  * @var string $wrapperClass
+ * @var bool $enableAutoSubmit
+ * @var bool $showInputLabel
+ * @var string $placeholderText
+ * @var string $submitButtonText
  */
 
 use yii\helpers\Html;
@@ -28,13 +32,13 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'query')->textInput(
             [
                 'class' => 'form-control search-input-input',
-                'placeholder' => Yii::t('search', 'Search'),
-                'onchange' => '$("#' . $formId . '").submit()',
+                'placeholder' => $placeholderText,
+                'onchange' => $enableAutoSubmit ? '$("#' . $formId . '").submit()' : null,
             ]
-        ) ?>
+        )->label($showInputLabel ? $model->getAttributeLabel('query') : false) ?>
 
         <?= Html::submitButton(
-            Yii::t('search', 'Search'),
+            $submitButtonText,
             [
                 'class' => 'btn btn-primary search-input-submit',
             ]

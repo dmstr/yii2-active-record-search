@@ -6,7 +6,7 @@ use dmstr\activeRecordSearch\models\Search;
 use dmstr\activeRecordSearch\models\SearchGroup;
 use Yii;
 use yii\base\Component;
-use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
 
@@ -205,7 +205,7 @@ class SearchIndexer extends Component
                     $this->out('Config item with key: ' . $itemKey . ' is empty/unset and will be ignored.');
                     continue;
                 }
-                /** @var ActiveQuery $query */
+                /** @var ActiveRecord[] $models */
                 $models = $this->getItemsQuery($item)->all();
                 #$this->memDebug();
                 $detailInfo[$this->currentLang][$item['group']] = 0;
@@ -243,11 +243,13 @@ class SearchIndexer extends Component
                         continue;
                     }
 
+                    $modelPk = $model->getPrimaryKey();
+
                     $searchItem = new Search();
                     $searchItem->model_class = $item['model_class'];
                     $searchItem->route = $this->processRoute($model, $item['route']);
                     $searchItem->language = $this->currentLang;
-                    $searchItem->model_id = $model->id;
+                    $searchItem->model_id = is_array($modelPk) ? Json::encode($model->getPrimaryKey(true)) : (string)$modelPk;
                     $searchItem->search_text = $text;
                     $searchItem->url_params = Json::encode($this->processUrlParams($model, $item['url_params']));
                     $searchItem->link_text = $this->processProperty($model, $item['link_text']);

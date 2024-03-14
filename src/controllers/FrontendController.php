@@ -27,7 +27,7 @@ class FrontendController extends Controller
     {
 
         if ((!empty($this->module->frontendPermission)) && (! Yii::$app->user->can($this->module->frontendPermission))) {
-            throw new MethodNotAllowedHttpException(Yii::t('yii', 'Permission denied.'));
+            throw new MethodNotAllowedHttpException(Yii::t('search', 'Permission denied.'));
         }
 
         // set layout from modul param frontendLayout

@@ -50,7 +50,7 @@ use yii\helpers\Html;
 
 <!-- attribute status -->
 			<?php
-            echo $form->field($model, 'status')->dropDownList([0 => YII::t('crud', 'inactive'), 1 => YII::t('crud', 'active')]);
+            echo $form->field($model, 'status')->dropDownList([0 => YII::t('search', 'inactive'), 1 => YII::t('search', 'active')]);
             ?>
 
 <!-- attribute name -->
