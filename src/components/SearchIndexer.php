@@ -157,6 +157,15 @@ class SearchIndexer extends Component
     protected $transaction;
     protected $currentLang;
 
+
+    /**
+     * array keys for the $detailInfo data struct provided by the self::update() method
+     * @var string
+     */
+    protected $infoItemsTotalKey = 'items-total-count';
+    protected $infoItemsPerKey = 'items-per-config-key';
+
+
     /**
      * init system for this long running process
      * - set memory_limit and max_execution_time
@@ -208,7 +217,14 @@ class SearchIndexer extends Component
                 /** @var ActiveRecord[] $models */
                 $models = $this->getItemsQuery($item)->all();
                 #$this->memDebug();
-                $detailInfo[$this->currentLang][$item['group']] = 0;
+                // as more than one $itemKey can provide data for the same item->group,
+                // check/init subarray to get the correct info from indexer
+                if (empty($detailInfo[$this->currentLang][$item['group']])) {
+                    $detailInfo[$this->currentLang][$item['group']] = [];
+                    $detailInfo[$this->currentLang][$item['group']][$this->infoItemsTotalKey] = 0;
+                    $detailInfo[$this->currentLang][$item['group']][$this->infoItemsPerKey] = [];
+                }
+                $detailInfo[$this->currentLang][$item['group']][$this->infoItemsPerKey][$itemKey] = 0;
                 if (empty($models)) {
                     $this->debug('no models found');
                     continue;
@@ -256,7 +272,7 @@ class SearchIndexer extends Component
                     $searchItem->group = $item['group'];
                     if ($searchItem->validate()) {
                         if ($searchItem->save()) {
-                            $this->outItemInfo($searchItem);
+                            $this->outItemInfo($itemKey, $searchItem);
                         } else {
                             \Yii::$app->language = $cmd_lang;
                             $this->transaction->rollBack();
@@ -270,7 +286,8 @@ class SearchIndexer extends Component
                         Yii::error($searchItem->errors);
                         exit;
                     }
-                    ++$detailInfo[$this->currentLang][$item['group']];
+                    ++$detailInfo[$this->currentLang][$item['group']][$this->infoItemsTotalKey];
+                    ++$detailInfo[$this->currentLang][$item['group']][$this->infoItemsPerKey][$itemKey];
                     // cleanup mem
                     $searchItem = null;
                     unset($searchItem);
@@ -476,15 +493,16 @@ class SearchIndexer extends Component
      */
 
     /**
+     * @param string $itemKey
      * @param Search $searchItem
      *
      * @return void
      */
-    protected function outItemInfo(Search $searchItem)
+    protected function outItemInfo($itemKey, Search $searchItem)
     {
-        $values = [$this->currentLang, $searchItem->model_class, $searchItem->model_id];
+        $values = [$this->currentLang, $itemKey, $searchItem->group, $searchItem->model_class, $searchItem->model_id];
         if ($this->debug) {
-            $values = [$this->currentLang, $searchItem->model_class, $searchItem->model_id, $searchItem->search_text];
+            $values[] = $searchItem->search_text;
         }
         $msg = 'Saved: ' . implode(' | ', $values);
         $this->out($msg);
