@@ -19,7 +19,7 @@ class m220114_133837_init_search_tables extends Migration
             'created_at' => $this->timestamp()->defaultExpression('NOW()'),
             'updated_at' => $this->timestamp()->defaultExpression('NOW()'),
         ], ($this->db->driverName === 'mysql' ? 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB' : null));
-        $this->createIndex('ref_name', self::GROUP_TABLE, ['ref_name']);
+        $this->createIndex('ref_name', self::GROUP_TABLE, ['ref_name'], true);
 
         $this->createTable(self::GROUP_TRANS_TABLE, [
             'id'          => $this->primaryKey(11),
