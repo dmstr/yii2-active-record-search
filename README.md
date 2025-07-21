@@ -236,11 +236,12 @@ date >> $LOG
 
 If there is the need to make HTTP requests to fetch content, a Yii2 console application must be able to generate absolute URLs.
 Since console apps lack an HTTP context, you need to set the UrlManager's hostInfo property to enable proper URL generation.
+You can ie. set an ENV `CONSOLE_HOST_INFO` to the current URL of your page `https://example.com/`.
 
 ```php
 'urlManager' => [
-    'hostInfo' => getenv('CONSOLE_HOST_INFO') // https://example.com/your-page
-],
+    'hostInfo' => getenv('CONSOLE_HOST_INFO'),
+]
 ```
 
 ```php
