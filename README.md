@@ -223,3 +223,28 @@ date >> $LOG
      ],
  ];
 ```
+
+## Host info for URL Requests in Console Applications
+
+When using models that need to make HTTP requests to fetch their own content, the console application
+requires proper URL generation capabilities. In Yii2 console applications, when you need to generate absolute URLs for making HTTP requests to your own web application, you must
+configure the UrlManager's hostInfo property. Console commands lack the HTTP request context that automatically provides host information in web applications.
+
+```php
+'urlManager' => [
+    'hostInfo' => getenv('CONSOLE_HOST_INFO') // https://example.com/your-page
+],
+```
+
+```php
+'pages' => [
+    // ...
+    'attributes' => [
+        'content' => function (Page $item) {
+            // This method will fetch data using http requests
+            return $item->fetchContentForSearchIndexer();
+        }
+    ],
+    // ...
+],
+```
